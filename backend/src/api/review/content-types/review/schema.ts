@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "collectionType",
   "collectionName": "reviews",
   "info": {
@@ -19,4 +19,4 @@
     "source": { "type": "enumeration", "enum": ["google", "facebook", "website", "other"], "default": "google" },
     "featured": { "type": "boolean", "default": false }
   }
-}
+};

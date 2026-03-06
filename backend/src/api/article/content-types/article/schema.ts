@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "collectionType",
   "collectionName": "articles",
   "info": {
@@ -24,4 +24,4 @@
     "publishDate": { "type": "datetime" },
     "readingTime": { "type": "integer" }
   }
-}
+};

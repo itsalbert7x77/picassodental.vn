@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "collectionType",
   "collectionName": "team_members",
   "info": {
@@ -18,4 +18,4 @@
     "qualifications": { "type": "json" },
     "order": { "type": "integer", "default": 0 }
   }
-}
+};

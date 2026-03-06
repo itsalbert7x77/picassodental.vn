@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "singleType",
   "collectionName": "homepages",
   "info": {
@@ -28,4 +28,4 @@
     "seoTitle": { "type": "string" },
     "seoDescription": { "type": "text" }
   }
-}
+};

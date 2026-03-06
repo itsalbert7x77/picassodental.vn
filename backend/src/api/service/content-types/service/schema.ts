@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "collectionType",
   "collectionName": "services",
   "info": {
@@ -24,4 +24,4 @@
     "order": { "type": "integer", "default": 0 },
     "faqs": { "type": "relation", "relation": "oneToMany", "target": "api::faq.faq", "mappedBy": "service" }
   }
-}
+};

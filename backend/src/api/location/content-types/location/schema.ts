@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "collectionType",
   "collectionName": "locations",
   "info": {
@@ -24,4 +24,4 @@
     "seoDescription": { "type": "text" },
     "order": { "type": "integer", "default": 0 }
   }
-}
+};

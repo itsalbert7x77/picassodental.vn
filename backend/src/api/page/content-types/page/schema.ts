@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "collectionType",
   "collectionName": "pages",
   "info": {
@@ -18,4 +18,4 @@
     "template": { "type": "enumeration", "enum": ["default", "service", "location", "about", "contact", "landing"], "default": "default" },
     "sections": { "type": "json" }
   }
-}
+};

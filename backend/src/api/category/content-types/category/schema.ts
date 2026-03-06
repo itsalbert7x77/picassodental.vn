@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "collectionType",
   "collectionName": "categories",
   "info": {
@@ -14,4 +14,4 @@
     "description": { "type": "text" },
     "articles": { "type": "relation", "relation": "oneToMany", "target": "api::article.article", "mappedBy": "category" }
   }
-}
+};

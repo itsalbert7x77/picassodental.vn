@@ -1,4 +1,4 @@
-{
+export default {
   "kind": "collectionType",
   "collectionName": "gallery_items",
   "info": {
@@ -17,4 +17,4 @@
     "patientInfo": { "type": "string" },
     "order": { "type": "integer", "default": 0 }
   }
-}
+};
