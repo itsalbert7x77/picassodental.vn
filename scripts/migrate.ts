@@ -4,14 +4,16 @@
  *
  * Usage:
  *   1. Start Strapi: cd backend && npm run develop
- *   2. Create an admin user and generate an API token
- *   3. Set STRAPI_TOKEN below
+ *   2. Create an admin user at http://localhost:1337/admin
+ *   3. Set ADMIN_EMAIL and ADMIN_PASSWORD below
  *   4. Run: npx tsx scripts/migrate.ts
  */
 
-const STRAPI_URL = 'http://localhost:1337';
-const STRAPI_TOKEN = process.env.STRAPI_TOKEN || ''; // Set your API token here
+const STRAPI_URL = 'http://127.0.0.1:1337';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lam.nguyen@picassodental.vn';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '100Bil@2024';
 const SOURCE_URL = 'https://picassodental.vn';
+let ADMIN_JWT = '';
 
 // ── Sitemap URLs ──────────────────────────────────────────────────────────────
 
@@ -224,12 +226,47 @@ const ARTICLE_SLUGS = [
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+async function loginAdmin(): Promise<string> {
+  const res = await fetch(`${STRAPI_URL}/admin/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Admin login failed (${res.status}): ${text}`);
+  }
+
+  const data = await res.json();
+  return data.data.token;
+}
+
 async function strapiRequest(path: string, method: string, body?: any) {
-  const res = await fetch(`${STRAPI_URL}/api${path}`, {
+  // Use the admin Content Manager API
+  const res = await fetch(`${STRAPI_URL}/content-manager/collection-types${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
-      ...(STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {}),
+      Authorization: `Bearer ${ADMIN_JWT}`,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Strapi ${method} ${path} failed (${res.status}): ${text}`);
+  }
+
+  return res.json();
+}
+
+async function strapiSingleTypeRequest(path: string, method: string, body?: any) {
+  const res = await fetch(`${STRAPI_URL}/content-manager/single-types${path}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${ADMIN_JWT}`,
     },
     body: body ? JSON.stringify(body) : undefined,
   });
@@ -285,15 +322,13 @@ async function migrateCategories() {
   console.log('\n📁 Migrating categories...');
   for (const cat of CATEGORY_URLS) {
     try {
-      await strapiRequest('/categories', 'POST', {
-        data: {
-          name: cat.name,
-          slug: cat.slug,
-        },
+      await strapiRequest('/api::category.category', 'POST', {
+        name: cat.name,
+        slug: cat.slug,
       });
       console.log(`  ✅ ${cat.name}`);
     } catch (error: any) {
-      if (error.message.includes('unique')) {
+      if (error.message.includes('unique') || error.message.includes('already')) {
         console.log(`  ⏭️  ${cat.name} (already exists)`);
       } else {
         console.error(`  ❌ ${cat.name}:`, error.message);
@@ -310,21 +345,19 @@ async function migratePages() {
     try {
       const { title, content, excerpt } = await fetchPage(slug);
 
-      await strapiRequest('/pages', 'POST', {
-        data: {
-          title,
-          slug,
-          content,
-          seoDescription: excerpt,
-          seoTitle: title,
-        },
+      await strapiRequest('/api::page.page', 'POST', {
+        title,
+        slug,
+        content,
+        seoDescription: excerpt,
+        seoTitle: title,
       });
 
       count++;
       console.log(`  ✅ [${count}/${PAGE_SLUGS.length}] ${title}`);
       await delay(500); // Rate limit
     } catch (error: any) {
-      if (error.message.includes('unique')) {
+      if (error.message.includes('unique') || error.message.includes('already')) {
         console.log(`  ⏭️  ${slug} (already exists)`);
       } else {
         console.error(`  ❌ ${slug}:`, error.message);
@@ -341,16 +374,14 @@ async function migrateArticles() {
     try {
       const { title, content, excerpt } = await fetchPage(slug);
 
-      await strapiRequest('/articles', 'POST', {
-        data: {
-          title,
-          slug,
-          content,
-          excerpt,
-          seoTitle: title,
-          seoDescription: excerpt,
-          publishDate: new Date().toISOString(),
-        },
+      await strapiRequest('/api::article.article', 'POST', {
+        title,
+        slug,
+        content,
+        excerpt,
+        seoTitle: title,
+        seoDescription: excerpt,
+        publishDate: new Date().toISOString(),
       });
 
       count++;
@@ -372,23 +403,29 @@ async function main() {
   console.log('🚀 Starting content migration from picassodental.vn to Strapi');
   console.log(`   Source: ${SOURCE_URL}`);
   console.log(`   Target: ${STRAPI_URL}`);
-  console.log(`   Token: ${STRAPI_TOKEN ? 'set' : '⚠️  NOT SET'}`);
-
-  if (!STRAPI_TOKEN) {
-    console.error('\n❌ STRAPI_TOKEN is required. Set it as an environment variable or in this script.');
-    console.log('   1. Start Strapi: cd backend && npm run develop');
-    console.log('   2. Create admin user at http://localhost:1337/admin');
-    console.log('   3. Go to Settings > API Tokens > Create new API Token (full access)');
-    console.log('   4. Run: STRAPI_TOKEN=your_token npx tsx scripts/migrate.ts');
-    process.exit(1);
-  }
+  console.log(`   Admin: ${ADMIN_EMAIL}`);
 
   // Test connection
   try {
-    await fetch(`${STRAPI_URL}/api/articles`);
+    const testRes = await fetch(`${STRAPI_URL}/_health`);
+    if (!testRes.ok && testRes.status !== 204) {
+      throw new Error(`HTTP ${testRes.status}`);
+    }
     console.log('   ✅ Strapi connection OK');
-  } catch {
+  } catch (err: any) {
     console.error('\n❌ Cannot connect to Strapi. Make sure it is running on', STRAPI_URL);
+    console.error('   Error:', err.message || err);
+    process.exit(1);
+  }
+
+  // Login as admin
+  try {
+    ADMIN_JWT = await loginAdmin();
+    console.log('   ✅ Admin login OK');
+  } catch (err: any) {
+    console.error('\n❌ Admin login failed. Check email/password.');
+    console.error('   Error:', err.message || err);
+    console.log('   Set ADMIN_EMAIL and ADMIN_PASSWORD env vars or edit scripts/migrate.ts');
     process.exit(1);
   }
 
