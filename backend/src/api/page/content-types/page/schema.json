@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "Page",
+    "description": "Static pages"
+  },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "title", "required": true },
+    "content": { "type": "richtext" },
+    "featuredImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "seoTitle": { "type": "string" },
+    "seoDescription": { "type": "text" },
+    "template": { "type": "enumeration", "enum": ["default", "service", "location", "about", "contact", "landing"], "default": "default" },
+    "sections": { "type": "json" }
+  }
+}

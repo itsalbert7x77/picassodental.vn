@@ -1,0 +1,17 @@
+{
+  "kind": "collectionType",
+  "collectionName": "faqs",
+  "info": {
+    "singularName": "faq",
+    "pluralName": "faqs",
+    "displayName": "FAQ",
+    "description": "Frequently asked questions"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "question": { "type": "string", "required": true },
+    "answer": { "type": "richtext", "required": true },
+    "service": { "type": "relation", "relation": "manyToOne", "target": "api::service.service", "inversedBy": "faqs" },
+    "order": { "type": "integer", "default": 0 }
+  }
+}

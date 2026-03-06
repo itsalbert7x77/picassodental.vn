@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "articles",
+  "info": {
+    "singularName": "article",
+    "pluralName": "articles",
+    "displayName": "Article",
+    "description": "Blog posts and articles"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "title", "required": true },
+    "excerpt": { "type": "text" },
+    "content": { "type": "richtext" },
+    "featuredImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "seoTitle": { "type": "string" },
+    "seoDescription": { "type": "text" },
+    "category": { "type": "relation", "relation": "manyToOne", "target": "api::category.category", "inversedBy": "articles" },
+    "tags": { "type": "json" },
+    "author": { "type": "string" },
+    "publishDate": { "type": "datetime" },
+    "readingTime": { "type": "integer" }
+  }
+}

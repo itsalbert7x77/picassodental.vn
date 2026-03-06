@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage",
+    "description": "Homepage content"
+  },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "heroTitle": { "type": "string" },
+    "heroSubtitle": { "type": "text" },
+    "heroImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "heroCTAText": { "type": "string", "default": "Book an Appointment" },
+    "heroCTALink": { "type": "string", "default": "/book-appointment" },
+    "aboutTitle": { "type": "string" },
+    "aboutContent": { "type": "richtext" },
+    "aboutImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "servicesTitle": { "type": "string", "default": "Our Services" },
+    "servicesSubtitle": { "type": "text" },
+    "teamTitle": { "type": "string", "default": "Meet Our Team" },
+    "teamSubtitle": { "type": "text" },
+    "reviewsTitle": { "type": "string", "default": "Patient Reviews" },
+    "reviewsSubtitle": { "type": "text" },
+    "blogTitle": { "type": "string", "default": "Latest Articles" },
+    "blogSubtitle": { "type": "text" },
+    "seoTitle": { "type": "string" },
+    "seoDescription": { "type": "text" }
+  }
+}

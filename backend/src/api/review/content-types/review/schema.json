@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Review",
+    "description": "Patient reviews"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "patientName": { "type": "string", "required": true },
+    "country": { "type": "string" },
+    "rating": { "type": "integer", "min": 1, "max": 5, "default": 5 },
+    "content": { "type": "text", "required": true },
+    "treatmentType": { "type": "string" },
+    "photo": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "date": { "type": "date" },
+    "source": { "type": "enumeration", "enum": ["google", "facebook", "website", "other"], "default": "google" },
+    "featured": { "type": "boolean", "default": false }
+  }
+}

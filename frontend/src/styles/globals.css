@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #C8902D;
+  --color-secondary: #569542;
+  --color-accent: #0D3C79;
+  --color-navy: #13297E;
+  --color-navy-hover: #B06F69;
+  --color-text: #575757;
+  --color-beige: #F0E5DF;
+  --color-beige-light: rgba(240, 229, 223, 0.3);
+
+  --font-heading: 'PP Fragment', Georgia, serif;
+  --font-body: 'Afacad', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    font-size: 19px;
+    line-height: 30px;
+    color: var(--color-text);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: #000;
+  }
+}
+
+@layer components {
+  .container-custom {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background-color: var(--color-navy);
+    color: #fff;
+    padding: 13px 45px;
+    border: 1px solid var(--color-navy);
+    font-family: var(--font-body);
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-navy-hover);
+    border-color: var(--color-navy-hover);
+  }
+
+  .btn-outline {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--color-navy);
+    padding: 13px 45px;
+    border: 1px solid var(--color-navy);
+    font-family: var(--font-body);
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-outline:hover {
+    background-color: var(--color-navy);
+    color: #fff;
+  }
+
+  .section-padding {
+    padding: 80px 0;
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    color: #000;
+    margin-bottom: 16px;
+  }
+
+  .section-subtitle {
+    font-size: 18px;
+    color: var(--color-text);
+    max-width: 600px;
+  }
+
+  .rich-text h2 {
+    font-size: 32px;
+    margin: 24px 0 12px;
+  }
+
+  .rich-text h3 {
+    font-size: 26px;
+    margin: 20px 0 10px;
+  }
+
+  .rich-text p {
+    margin-bottom: 16px;
+  }
+
+  .rich-text ul, .rich-text ol {
+    margin-bottom: 16px;
+    padding-left: 24px;
+  }
+
+  .rich-text li {
+    margin-bottom: 8px;
+  }
+
+  .rich-text img {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
+  }
+
+  .rich-text a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+}

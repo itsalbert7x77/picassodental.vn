@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "services",
+  "info": {
+    "singularName": "service",
+    "pluralName": "services",
+    "displayName": "Service",
+    "description": "Dental services"
+  },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "title", "required": true },
+    "shortDescription": { "type": "text" },
+    "content": { "type": "richtext" },
+    "icon": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "featuredImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "gallery": { "type": "media", "multiple": true, "allowedTypes": ["images"] },
+    "price": { "type": "string" },
+    "priceRange": { "type": "string" },
+    "duration": { "type": "string" },
+    "seoTitle": { "type": "string" },
+    "seoDescription": { "type": "text" },
+    "order": { "type": "integer", "default": 0 },
+    "faqs": { "type": "relation", "relation": "oneToMany", "target": "api::faq.faq", "mappedBy": "service" }
+  }
+}
