@@ -245,7 +245,7 @@ export default {
 
   async bootstrap({ strapi }) {
     // Check if migration already done
-    const existingCategories = await strapi.documents('api::category.category').findMany({});
+    const existingCategories = await strapi.db.query('api::category.category').findMany({});
     if (existingCategories.length > 0) {
       console.log('⏭️  Migration already done, skipping bootstrap seed.');
       return;
@@ -257,7 +257,7 @@ export default {
     console.log('\n📁 Creating categories...');
     for (const cat of CATEGORY_DATA) {
       try {
-        await strapi.documents('api::category.category').create({ data: cat });
+        await strapi.db.query('api::category.category').create({ data: cat });
         console.log(`  ✅ ${cat.name}`);
       } catch (e: any) {
         console.log(`  ⏭️  ${cat.name}: ${e.message}`);
@@ -270,7 +270,7 @@ export default {
     for (const slug of PAGE_SLUGS) {
       try {
         const { title, content, excerpt } = await fetchPageContent(slug);
-        await strapi.documents('api::page.page').create({
+        await strapi.db.query('api::page.page').create({
           data: { title, slug, content, seoDescription: excerpt, seoTitle: title },
         });
         pageCount++;
@@ -287,7 +287,7 @@ export default {
     for (const slug of ARTICLE_SLUGS) {
       try {
         const { title, content, excerpt } = await fetchPageContent(slug);
-        await strapi.documents('api::article.article').create({
+        await strapi.db.query('api::article.article').create({
           data: {
             title,
             slug,
